@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  trade_date: 2013-09-12
+  merchant_number: MyString
+  agent_number: MyString
+  terminal_number: MyString
+  biz_count: 1
+  amount: 9.99
+  commission: 9.99
+  actual_amount: 9.99
+  base_commission: 9.99
+  profit: 9.99
+
+two:
+  trade_date: 2013-09-12
+  merchant_number: MyString
+  agent_number: MyString
+  terminal_number: MyString
+  biz_count: 1
+  amount: 9.99
+  commission: 9.99
+  actual_amount: 9.99
+  base_commission: 9.99
+  profit: 9.99

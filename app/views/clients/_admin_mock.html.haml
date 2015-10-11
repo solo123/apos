@@ -1,0 +1,8 @@
+- if current_user.admin?
+  - if session[:mock_user]
+    .alert.alert-dismissable.alert-info
+      当前查看用户: #{User.find(session[:mock_user]).username}
+      = link_to '(更换）', users_path
+  - else
+    .alert.alert-dismissable.alert-warning
+      = link_to '未选择查看用户', users_path

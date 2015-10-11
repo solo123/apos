@@ -1,0 +1,36 @@
+/ Static navbar
+.navbar.navbar-default.navbar-static-top
+  .container
+    .navbar-header
+      %button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", :type => "button"}
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      %a.navbar-brand{:href => "/"} 
+        = image_tag(("wooul-logo.png"), :alt => "Wooul渠道系统")
+        渠道系统
+    .navbar-collapse.collapse
+      %ul.nav.navbar-nav
+        %li{class: (controller?('my_trades') ? 'active' : '')}= link_to '商户数据', my_trades_path
+        - if current_user && current_user.agent?
+          %li{class: (controller?('clients') ? 'active' : '')}= link_to '我的代理商', clients_path
+        - if current_user && current_user.admin?
+          %li{class: (controller?('trades') ? 'active' : '')}= link_to '交易数据', trades_path
+          %li{class: (controller?('reports') ? 'active' : '')}= link_to '统计报表', reports_path
+          %li{class: (controller?('users') ? 'active' : '')}= link_to '用户管理', users_path
+        - if current_user && current_user.agent?
+          %li 
+            %a{href: '/notify'} 公告
+
+      %ul.nav.navbar-nav.navbar-right
+        - if current_user
+          %li 
+            %strong.welcome 
+              欢迎 #{current_user.username}! 
+              - if current_user.admin?
+                [Admin]
+          %li= link_to '退出登录', destroy_user_session_path, method: 'delete'
+        - else
+          %li 
+            %span.pleaselogin 请登录！
+    / /.nav-collapse

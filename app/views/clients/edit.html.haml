@@ -1,0 +1,26 @@
+= render 'admin_mock'
+
+.btn-group
+  = link_to t(:back), @object, class: 'btn btn-default'
+  = link_to t(:show), @object, class: 'btn btn-default'
+
+.row
+  .col-md-6
+    = simple_form_for @object, :html => {:class => 'well form-horizontal'}  do |f|
+      = f.error_notification
+      = f.input :email
+      = f.input :username
+      = f.input :roles
+      .form-actions
+        = f.submit t(:save), :class => "btn btn-primary" 
+        = submit_tag t(:cancel), :type => :reset, :class => "btn btn-danger" 
+  .col-md-6
+    = simple_form_for @object, :html => {:class => 'well form-horizontal'}  do |f|
+      = f.error_notification
+      = f.input :password
+      = f.input :password_confirmation
+      .form-actions
+        = f.submit t(:save), :class => "btn btn-primary" 
+        = submit_tag t(:cancel), :type => :reset, :class => "btn btn-danger" 
+
+= render partial: 'client_merchants', locals: { user: @object }

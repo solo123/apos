@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @ttt.name
+%p
+  %b Level:
+  = @ttt.level
+
+= link_to 'Edit', edit_ttt_path(@ttt)
+\|
+= link_to 'Back', ttts_path

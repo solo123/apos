@@ -1,0 +1,32 @@
+= content_for :head do
+  %script{src: "/css/chart.min.js"}
+  :javascript
+    var test = null;
+    $(function(){
+      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        test = e.target // activated tab
+        var url = '/reports/' + $(e.target).data('report') + '.js';
+        $.get(url);
+      });
+    });
+
+.col-md-3
+  %select.form-control#diagram_type
+    %option{value: 'bar'} 柱状图
+    %option{value: 'line'} 曲线图
+
+%canvas#chart_canvas{ width: 840, height: 400}
+
+%ul.nav.nav-tabs#myTab1
+  %li= link_to '月报', '#1', 'data-toggle' => 'tab', 'data-report' => 'monthly'
+  %li= link_to '日报', '#2', 'data-toggle' => 'tab', 'data-report' => 'daily'
+  %li= link_to '代理', '#3', 'data-toggle' => 'tab', 'data-report' => 'agents'
+  %li= link_to '商户', '#4', 'data-toggle' => 'tab', 'data-report' => 'merchants'
+.tab-content
+  #1.tab-pane &nbsp; 
+  #2.tab-pane &nbsp;
+  #3.tab-pane &nbsp;
+  #4.tab-pane &nbsp;
+
+#report_content
+

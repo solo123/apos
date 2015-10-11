@@ -1,0 +1,21 @@
+%h1 Listing ttts
+
+%table
+  %tr
+    %th Name
+    %th Level
+    %th
+    %th
+    %th
+
+  - @ttts.each do |ttt|
+    %tr
+      %td= ttt.name
+      %td= ttt.level
+      %td= link_to 'Show', ttt
+      %td= link_to 'Edit', edit_ttt_path(ttt)
+      %td= link_to 'Destroy', ttt, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Ttt', new_ttt_path

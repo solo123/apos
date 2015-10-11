@@ -1,0 +1,101 @@
+= render 'clients/admin_mock'
+.form-inline
+  - if @month_collection
+    = form_tag(my_trades_path, method: :get, class: "form-group") do
+      = collection_select  nil, :trade_month, @month_collection, :td, :td, {selected: params[:trade_month]}, class: "form-control", :onchange => "this.form.submit()"
+
+  = search_form_for @q, url: my_trades_path, html: {class: "form-group"} do |f|
+    .form-group
+      = f.label :trade_date_gteq, '开始日期', class: "sr-only"
+      = f.text_field :trade_date_gteq, placeholder: "开始日期", class: "form-control search-ipt-terminal date-picker"
+    .form-group
+      = f.label :trade_date_lteq, '结束日期', class: "sr-only"
+      = f.text_field :trade_date_lteq, placeholder: '结束日期', class: 'form-control search-ipt-terminal date-picker'
+    .form-group
+      = f.text_field :merchant_number_cont, placeholder: "商户编号", class: "form-control"
+    .form-group
+      = f.text_field :merchant_name_cont, placeholder: "商户名称", class: "form-control"
+    .form-group
+      = f.text_field :terminal_number_cont, placeholder: "终端号", class: "form-control"
+    = f.submit '筛选', class: "btn btn-primary"
+%p
+= will_paginate @collection
+%section.r-morethan-800
+  %table.table.table-bordered.table-striped.table-hover
+    %tr
+      %th 交易日期
+      %th 商户号 
+      %th 商户名称
+      %th 终端号
+      %th 交易笔数
+      %th 交易金额
+      %th 交易手续费
+      %th 实收金额
+      - if @data_user && @data_user.agent?
+        %th 基准手续费
+        %th 利润
+
+    %tr.success
+      %td{colspan:'4'} 合计
+      %td= @sum[:biz_count]
+      %td.num= format_dec @sum[:amount]
+      %td.num= format_dec @sum[:commission]
+      %td.num= format_dec @sum[:actual_amount]
+      - if @data_user && @data_user.agent?
+        %td.num= format_dec @sum[:base_commission]
+        %td.num= format_dec @sum[:profit]
+
+    - @collection.each do |trade|
+      %tr
+        %td= trade.trade_date
+        %td= trade.merchant_number
+        %td= trade.merchant_name
+        %td= trade.terminal_number
+        %td= trade.biz_count
+        %td.num= format_dec trade.amount
+        %td.num= format_dec trade.commission
+        %td.num= format_dec trade.actual_amount
+        - if @data_user && @data_user.agent?
+          %td.num= format_dec trade.base_commission
+          %td.num= format_dec trade.profit
+        
+%section.r-lessthan-800
+  .panel.panel-success
+    .panel-heading 
+      %h3.panel-title 合计
+    .panel-body
+      %ul
+        %li 
+          交易笔数：
+          = @collection.sum(:biz_count)
+        %li 
+          交易金额：
+          %span.num= format_dec @collection.sum(:amount) 
+        %li 
+          交易手续费：
+          %span.num= format_dec @collection.sum(:commission)
+
+    %table.table.table-bordered.table-striped.table-hover
+      - @collection.each do |trade|
+        %tr
+          %td
+            = trade.trade_date
+          %td
+            = trade.merchant_name
+            %br 
+            %small.text-muted 商户号:
+            = trade.merchant_number
+            %br
+            %small.text-muted 终端号
+            = trade.terminal_number
+          %td
+            %small.text-muted 笔数
+            = trade.biz_count
+          %td.num
+            %small.text-muted 金额
+            = format_dec trade.amount
+            %br
+            %small.text-muted 手续费
+            %strong.text-danger
+              = format_dec trade.commission
+= will_paginate @collection

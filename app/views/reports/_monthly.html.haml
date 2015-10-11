@@ -1,0 +1,15 @@
+%table.table.table-bordered.table-striped.table-hover#data_table
+  %thead
+    %tr
+      %th 交易日期
+      %th= link_to '交易笔数', 'javascript:show_bar_diagram("chart_canvas", "data_table", 1, 2)'
+      %th= link_to '交易金额', 'javascript:show_bar_diagram("chart_canvas", "data_table", 1, 3)'
+      %th= link_to '交易分润', 'javascript:show_bar_diagram("chart_canvas", "data_table", 1, 4)'
+  %tbody
+  - @results.each do |r|
+    %tr
+      %td= r.trade_date.strftime('%Y-%m')
+      %td= r.biz_count
+      %td.num= format_dec r.amount
+      %td.num= format_dec r.profit
+

@@ -1,0 +1,43 @@
+%h4= @report_title
+= link_to '所有商户', "/reports/merchants?start_date=#{@start_date}&end_date=#{@end_date}", remote: true
+
+= form_tag "/reports/#{action_name}", class: "form-inline", remote: true do
+  .form-group
+    = label_tag :start_date, '开始日期', class: "sr-only"
+    = text_field_tag :start_date, @start_date, {placeholder: "开始日期", class: "form-control search-ipt-terminal date-picker"}
+  .form-group
+    = label_tag :end_date, '结束日期', class: "sr-only"
+    = text_field_tag :end_date, @end_date, placeholder: '结束日期', class: 'form-control search-ipt-terminal date-picker'
+  .form-group
+    = submit_tag '查找', class: "btn btn-primary"
+
+%table.table.table-bordered.table-striped.table-hover
+  %thead
+    %tr
+      %th 编号
+      - @data_fields.each_with_index do |field, idx|
+        %th
+          = field
+          - if @data_class && (@data_class[idx].start_with? 'num')
+            %a{onclick: "show2_diagram(this);"}
+              %i.glyphicon.glyphicon-signal
+  %tbody
+  - @results.each_with_index do |r, idx|
+    %tr
+      %td.mid= idx + 1
+      - @data_attrs.each_with_index do |attr, i|
+        - if @data_class
+          - if @data_class[i] == 's'
+            %td= r[attr]
+          - elsif @data_class[i] == 'num_f'
+            %td.num= format_dec r[attr]
+          - elsif @data_class[i] == 'num_i'
+            %td.mid= r[attr]
+          - else
+            %td{class: @data_class[i]}= r[attr]
+        - else
+          %td= r[attr]
+
+
+
+

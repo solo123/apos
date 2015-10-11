@@ -1,0 +1,81 @@
+- if params[:op] == 'import'
+  .btn-group
+    = link_to '正式数据', trades_path, class: "btn btn-default"
+    = link_to '清空数据', del_trades_path, remote: true, class: "btn btn-default"
+    = link_to '提交数据', submit_trades_path, data: {confirm: '数据提交后将不能修改，并会被客户查询到。'}, remote: true, class: "btn btn-default"
+    %a.btn.btn-primary{'data-toggle' => "modal", href: "#myModal"} 导入终端交易数据
+- else
+  = search_form_for @q ,html: {class: "form-inline", role: 'form'} do |f|
+    .form-group
+      = f.label :trade_date_gteq, '开始日期', class: "sr-only"
+      = f.text_field :trade_date_gteq, placeholder: "开始日期", class: "form-control search-ipt-terminal date-picker"
+    .form-group
+      = f.label :trade_date_lteq, '结束日期', class: "sr-only"
+      = f.text_field :trade_date_lteq, placeholder: '结束日期', class: 'form-control search-ipt-terminal date-picker'
+    .form-group
+      = f.label :merchant_number_cont, '商户编号', class: "sr-only"
+      = f.text_field :merchant_number_cont, placeholder: "商户编号", class: "form-control"
+    .form-group
+      = f.label :merchant_name_cont, '商户名称', class: "sr-only"
+      = f.text_field :merchant_name_cont, placeholder: "商户名称", class: "form-control"
+    .form-group
+      = f.label :terminal_number_cont, '终端号', class: "sr-only"
+      = f.text_field :terminal_number_cont, placeholder: "终端号", class: "form-control search-ipt-terminal"
+    .form-group
+      = f.label :biz_count_gteq, '交易笔数大于', class: "sr-only"
+      = f.text_field :biz_count_gteq, placeholder: '交易笔数大于', class: 'form-control search-ipt-terminal'
+    = f.submit '查找', class: "btn btn-primary"
+    = link_to '导入数据', trades_path(op: 'import'), class: "btn btn-default"
+    - if params[:q][:trade_date_gteq] && params[:q][:trade_date_lteq] && params[:q][:trade_date_gteq] == params[:q][:trade_date_lteq]
+      - dt = params[:q][:trade_date_gteq].to_date
+      = link_to '删除数据', rm_trades_path(dt: dt), class: 'btn btn-danger', data: {confirm: "确认要删除 #{dt} 的数据吗？"}
+
+
+
+= will_paginate @collection
+%table.table.table-bordered.table-striped.table-hover
+  %tr
+    %th 交易日期
+    %th 商户号 
+    %th 商户名称
+    %th 电话号码
+    %th 业务员
+    %th 交易笔数
+    %th 交易金额
+  %tr.success
+    %td{colspan:'5'} 合计
+    %td= @sum[:biz_count]
+    %td.num= format_dec @sum[:amount]
+
+  - @collection.each do |trade|
+    %tr
+      %td= trade.trade_date
+      %td= trade.merchant_number
+      %td= trade.merchant_name
+      %td= trade.merchant_tel
+      %td= trade.agent_name
+      %td= trade.biz_count
+      %td.num= number_with_delimiter '%.2f' % trade.amount
+
+  %tr.success
+    %td{colspan:'5'} 合计
+    %td= @sum[:biz_count]
+    %td.num= format_dec @sum[:amount]
+= will_paginate @collection
+%br
+
+.modal.fade{id: "myModal", tabindex: "-1", role: "dialog", 'aria-labelledby' => "myModalLabel", 'aria-hidden' => "true"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{type: "button", 'data-dismiss' => "modal",  'aria-hidden' => "true"} &times;
+        %h4.modal-title 导入终端交易数据
+      .modal-body
+        = form_tag import_trades_path, remote: true do 
+          .form-group
+            = text_field_tag 'trade_date', Date.today, class: 'form-control', placeholder: '交易日期'
+          .form-group
+            = text_area_tag 'import_text', '', class: 'form-control', placeholder: ' 商户号 | 商户名称 | 代理名称 | 商户电话 | 费率 | 交易笔数 | 交易金额', :rows => 10
+      .modal-footer
+        %button.btn.btn-default{type: "button", 'data-dismiss' => "modal"} 放弃修改
+        %button.btn.btn-primary{:onclick => "submit_dialog_form(this)", :disable_with => "正在处理...."} 保存修改

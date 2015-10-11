@@ -1,0 +1,41 @@
+= form_tag '/reports/agents', class: "form-inline", remote: true do
+  .form-group
+    = label_tag :start_date, '开始日期', class: "sr-only"
+    = text_field_tag :start_date, @start_date, {placeholder: "开始日期", class: "form-control search-ipt-terminal date-picker"}
+  .form-group
+    = label_tag :end_date, '结束日期', class: "sr-only"
+    = text_field_tag :end_date, @end_date, placeholder: '结束日期', class: 'form-control search-ipt-terminal date-picker'
+  .form-group
+    = submit_tag '查找', class: "btn btn-primary"
+
+%table.table.table-bordered.table-striped.table-hover
+  %thead
+    %tr
+      %th 代理名称  
+      %th 商户数  
+      %th 客户数
+      %th 交易笔数
+      %th 交易金额
+      %th 交易手续费
+      %th 实收金额
+      %th 基准手续费
+      %th 利润
+  %tbody
+  - User.all_agents.each do |agent|
+    - sum = agent_sum_trade(agent, @start_date..@end_date)
+    %tr
+      %td
+        = agent.username
+        #{agent.id}
+      %td= agent.agent_merchants.count
+      %td= agent.clients.count
+      - if sum
+        %td.num= sum[:biz_count]
+        %td.num= format_dec sum[:amount]
+        %td.num= format_dec sum[:commission]
+        %td.num= format_dec sum[:actual_amount]
+        %td.num= format_dec sum[:base_commission]
+        %td.num= format_dec sum[:profit]
+
+
+

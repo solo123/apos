@@ -1,0 +1,40 @@
+= form_tag "/reports/#{action_name}", class: "form-inline", remote: true do
+  .form-group
+    = label_tag :start_date, '开始日期', class: "sr-only"
+    = text_field_tag :start_date, @start_date, {placeholder: "开始日期", class: "form-control search-ipt-terminal date-picker"}
+  .form-group
+    = label_tag :end_date, '结束日期', class: "sr-only"
+    = text_field_tag :end_date, @end_date, placeholder: '结束日期', class: 'form-control search-ipt-terminal date-picker'
+  .form-group
+    = submit_tag '查找', class: "btn btn-primary"
+
+%table.table.table-bordered.table-striped.table-hover
+  %thead
+    %tr
+      %th 编号
+      %th 商户号
+      %th 商户名称
+      %th 
+        交易笔数
+        %a{onclick: "show2_diagram(this);"}
+          %i.glyphicon.glyphicon-signal
+      %th 
+        交易金额
+        %a{onclick: "show2_diagram(this);"}
+          %i.glyphicon.glyphicon-signal
+      %th 
+        交易分润
+        %a{onclick: "show2_diagram(this);"}
+          %i.glyphicon.glyphicon-signal
+  %tbody
+  - @results.each_with_index do |r, idx|
+    %tr
+      %td.mid= idx + 1
+      %td= link_to r.merchant_number, "/reports/merchant?merchant=#{r.merchant_number}&start_date=#{@start_date}&end_date=#{@end_date}", remote: true
+      %td= r.merchant_name
+      %td.num= format_dec r.biz_count
+      %td.num= format_dec r.amnt
+      %td.num= format_dec r.profit
+
+
+

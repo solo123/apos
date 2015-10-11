@@ -1,0 +1,23 @@
+!!!
+%html
+  %head
+    %title PosDaily
+    %link{rel: "stylesheet", href: "//netdna.bootstrapcdn.com/bootswatch/3.0.0/flatly/bootstrap.min.css"}
+    %link{:href=>"/css/bs3_datepicker/bs3_datepicker.css", :rel=>"stylesheet"}
+    
+    = stylesheet_link_tag    "application", media: "all"
+    = javascript_include_tag "application"
+
+    %script{src: "//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"}
+    %script{:src=>"/css/bs3_datepicker/bs3_datepicker.js"}
+    = yield :head
+
+    = csrf_meta_tags
+  %body
+    = render 'shared/main_menu'
+    .container
+      = bootstrap_flash
+      = yield
+
+    %footer.container
+      %p Copyright © 2013 深圳市沃银金融服务有限公司 客服电话: 0755-82559700, 4001-033-755

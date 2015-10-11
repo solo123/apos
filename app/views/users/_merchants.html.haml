@@ -1,0 +1,12 @@
+.row#merchants
+  .col-md-6
+    .list-group
+      .list-group-item.active 相关商户
+      - user.agent_merchants.each do |m|
+        = link_to "#{m.merchant_number} #{m.merchant_name}", del_agent_merchant_user_path(user, merchant_id: m.id), remote: true, method: :patch, class: "list-group-item"
+  .col-md-6
+    .list-group
+      .list-group-item.active 未关联的商户
+      - Merchant.free_merchants.each do |m|
+        = link_to "#{m.merchant_number} #{m.merchant_name}", add_agent_merchant_user_path(user, merchant_id: m.id), remote: true, method: :patch, class: "list-group-item"
+

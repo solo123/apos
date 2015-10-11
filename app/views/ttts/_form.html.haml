@@ -1,0 +1,16 @@
+= form_for @ttt do |f|
+  - if @ttt.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@ttt.errors.count, "error")} prohibited this ttt from being saved:"
+      %ul
+        - @ttt.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :level
+    = f.number_field :level
+  .actions
+    = f.submit 'Save'

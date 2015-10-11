@@ -1,0 +1,11 @@
+%h2 New User
+= simple_form_for @object, url: add_users_path, :html => {:class => 'well form-horizontal'}  do |f|
+  = f.error_notification
+  = f.input :username
+  = f.input :email
+  = f.input :roles
+  = f.input :password
+  = f.input :password_confirmation
+  .form-actions
+    = f.submit "Save", :class => "btn btn-primary" 
+    = submit_tag 'Cancel', :type => :reset, :class => "btn btn-danger" 

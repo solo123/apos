@@ -1,0 +1,16 @@
+.row#merchants
+  .col-md-6
+    .well
+      %h4 相关商户
+      %ul
+        - user.client_merchants.each do |m|
+          %li
+            = link_to "#{m.merchant_number} #{m.merchant_name}", del_merchant_client_path(user, merchant_id: m.id), remote: true, method: :patch
+  .col-md-6
+    .well
+      %h4 未关联的商户
+      %ul
+        - user.agent.agent_merchants.free_client_merchants.each do |m|
+          %li
+            = link_to "#{m.merchant_number} #{m.merchant_name}", add_merchant_client_path(user, merchant_id: m.id), remote: true, method: :patch
+

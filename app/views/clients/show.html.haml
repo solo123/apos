@@ -1,0 +1,15 @@
+.container= render 'admin_mock'
+
+= link_to '返回列表', clients_path
+%table.table.table-bordered.table-striped.table-hover
+  %thead
+    %tr
+      %th Attribures
+      %th Value
+  %tbody
+    - @object.attributes.each do |attr|
+      %tr
+        %td= attr[0]
+        %td= attr[1]
+
+
