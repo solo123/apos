@@ -40,10 +40,11 @@
     %th 商户名称
     %th 电话号码
     %th 业务员
+    %th 费率
     %th 交易笔数
     %th 交易金额
   %tr.success
-    %td{colspan:'5'} 合计
+    %td{colspan:'6'} 合计
     %td= @sum[:biz_count]
     %td.num= format_dec @sum[:amount]
 
@@ -54,11 +55,12 @@
       %td= trade.merchant_name
       %td= trade.merchant_tel
       %td= trade.agent_name
+      %td= trade.rate
       %td= trade.biz_count
       %td.num= number_with_delimiter '%.2f' % trade.amount
 
   %tr.success
-    %td{colspan:'5'} 合计
+    %td{colspan:'6'} 合计
     %td= @sum[:biz_count]
     %td.num= format_dec @sum[:amount]
 = will_paginate @collection
